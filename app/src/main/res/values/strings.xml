@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Booking Demo</string>
+    <plurals name="spots_remaining">
+        <item quantity="one">%d spot remaining</item>
+        <item quantity="other">%d spots remaining</item>
+    </plurals>
 </resources>
