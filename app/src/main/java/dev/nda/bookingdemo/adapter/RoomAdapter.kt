@@ -1,6 +1,9 @@
 package dev.nda.bookingdemo.adapter
 
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +26,33 @@ class RoomAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val room = rooms[position]
+        val spots = room.spots ?: 0
         Picasso.get().load(room.thumbnail).into(holder.image)
+        with(holder.image) {
+            if (spots == 0) {
+                val colorMatrix = ColorMatrix()
+                colorMatrix.setSaturation(0.0F)
+                colorFilter = ColorMatrixColorFilter(colorMatrix)
+                imageAlpha = 128
+            } else {
+                colorFilter = null
+                imageAlpha = 255
+            }
+        }
+        with(holder.availability) {
+            if (spots == 0) {
+                setTextColor(Color.RED)
+            } else {
+                setTextColor(Color.BLACK)
+            }
+        }
+
+
         holder.name.text = room.name
         holder.availability.text = resources.getQuantityString(
             R.plurals.spots_remaining,
-            room.spots ?: 0,
-            room.spots ?: 0
+            spots,
+            spots
         )
     }
 
