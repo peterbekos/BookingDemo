@@ -4,4 +4,5 @@
         <item quantity="one">%d spot remaining</item>
         <item quantity="other">%d spots remaining</item>
     </plurals>
+    <string name="book">Book</string>
 </resources>

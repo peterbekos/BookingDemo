@@ -3,6 +3,7 @@ package dev.nda.bookingdemo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import dev.nda.bookingdemo.adapter.RoomAdapter
 import dev.nda.bookingdemo.model.RoomModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,6 +22,12 @@ class MainActivity : AppCompatActivity() {
                 RoomModel("Room E", 10, "https://images.unsplash.com/photo-1571624436279-b272aff752b5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1504&q=80"),
             ),
             resources
-        )
+        ) {
+            Picasso.get().load(it.thumbnail).into(selected_room_bg_image)
+            Picasso.get().load(it.thumbnail).into(selected_room_fg_image)
+            selected_room_name.text = it.name
+            val spots = it.spots ?: 0
+            selected_room_status.text = resources.getQuantityString(R.plurals.spots_remaining, spots, spots)
+        }
     }
 }

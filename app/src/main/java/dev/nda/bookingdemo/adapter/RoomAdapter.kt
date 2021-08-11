@@ -16,7 +16,8 @@ import dev.nda.bookingdemo.model.RoomModel
 
 class RoomAdapter(
     private val rooms: List<RoomModel>,
-    private val resources: Resources
+    private val resources: Resources,
+    private val onRoomSelect: (RoomModel) -> Unit
 ) : RecyclerView.Adapter<RoomAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,6 +55,8 @@ class RoomAdapter(
             spots,
             spots
         )
+
+        holder.itemView.setOnClickListener { onRoomSelect(room) }
     }
 
     override fun getItemCount(): Int {
