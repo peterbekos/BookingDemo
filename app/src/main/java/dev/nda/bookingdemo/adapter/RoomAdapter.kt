@@ -12,6 +12,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import dev.nda.bookingdemo.R
+import dev.nda.bookingdemo.extension.makeGreyScale
+import dev.nda.bookingdemo.extension.makeNormalScale
 import dev.nda.bookingdemo.model.RoomModel
 
 class RoomAdapter(
@@ -28,33 +30,30 @@ class RoomAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val room = rooms[position]
         val spots = room.spots ?: 0
-        Picasso.get().load(room.thumbnail).into(holder.image)
+
+        holder.name.text = room.name
+
         with(holder.image) {
+            Picasso.get().load(room.thumbnail).into(this)
             if (spots == 0) {
-                val colorMatrix = ColorMatrix()
-                colorMatrix.setSaturation(0.0F)
-                colorFilter = ColorMatrixColorFilter(colorMatrix)
-                imageAlpha = 128
+                makeGreyScale()
             } else {
-                colorFilter = null
-                imageAlpha = 255
+                makeNormalScale()
             }
         }
+
         with(holder.availability) {
+            text = resources.getQuantityString(
+                R.plurals.spots_remaining,
+                spots,
+                spots
+            )
             if (spots == 0) {
                 setTextColor(Color.RED)
             } else {
                 setTextColor(Color.BLACK)
             }
         }
-
-
-        holder.name.text = room.name
-        holder.availability.text = resources.getQuantityString(
-            R.plurals.spots_remaining,
-            spots,
-            spots
-        )
 
         holder.itemView.setOnClickListener { onRoomSelect(room) }
     }
