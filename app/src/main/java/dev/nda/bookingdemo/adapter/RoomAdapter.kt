@@ -1,9 +1,6 @@
 package dev.nda.bookingdemo.adapter
 
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.ColorMatrix
-import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +15,6 @@ import dev.nda.bookingdemo.model.RoomModel
 
 class RoomAdapter(
     private val rooms: List<RoomModel>,
-    private val resources: Resources,
     private val onRoomSelect: (RoomModel) -> Unit
 ) : RecyclerView.Adapter<RoomAdapter.ViewHolder>() {
 
@@ -35,24 +31,14 @@ class RoomAdapter(
 
         with(holder.image) {
             Picasso.get().load(room.thumbnail).into(this)
-            if (spots == 0) {
-                makeGreyScale()
-            } else {
-                makeNormalScale()
-            }
+            if (spots == 0) makeGreyScale() else makeNormalScale()
         }
 
         with(holder.availability) {
             text = resources.getQuantityString(
-                R.plurals.spots_remaining,
-                spots,
-                spots
+                R.plurals.spots_remaining, spots, spots
             )
-            if (spots == 0) {
-                setTextColor(Color.RED)
-            } else {
-                setTextColor(Color.BLACK)
-            }
+            if (spots == 0) setTextColor(Color.RED) else setTextColor(Color.BLACK)
         }
 
         holder.itemView.setOnClickListener { onRoomSelect(room) }

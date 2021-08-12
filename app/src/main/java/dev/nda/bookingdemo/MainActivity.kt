@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
     private fun populateRooms(rooms: List<RoomModel>) {
         room_recycler.layoutManager = LinearLayoutManager(this)
         room_recycler.adapter = RoomAdapter(
-            rooms,
-            resources
+            rooms
         ) { onRoomSelected(it) }
     }
 
