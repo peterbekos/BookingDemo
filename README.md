@@ -17,7 +17,7 @@ Libraries used:
 - An OkHttp helper lib that lets me suspend and await our network calls. I think this looks nicer than chains of callbacks but it's just personal preference 
 - Gson for parsing JSON
 
-![alt text](https://github.com/peterbekos/[BookingDemo]/blob/main/screenshot.png?raw=true)
+![alt text](https://github.com/peterbekos/BookingDemo/blob/main/screenshot.png?raw=true)
 
 
 Things I might do / add if I had more time
