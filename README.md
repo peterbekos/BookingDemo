@@ -9,10 +9,18 @@ My approach to this was to
 
 When I first looked at the mock up for web I decided that a "book" button on each list element might cause mobile users to accidentally tap while scrolling. Instead I decided that it might be better to have the user first select a room and then confirm booking it with a button at the bottom.
 
-Some other minor improvements I took the liberty to add were making rooms with 0 spots available show red text with a greyscale image and disable the "book button" when those rooms are under selection. Also, you won't see it with the current test data but I'm taking advantage of plural strings which will show "1 spot" vs "2 spots".
+Some other minor improvements I took the liberty to add were making rooms with 0 spots available show red text with a greyscale image and disable the "book button" when those rooms are under selection. Also, you won't see it with the current test data but I'm taking advantage of plural strings which will show "1 spot" vs "2 spots". There's a refresh button that re-fetches the list
 
 Libraries used:
 - Picasso for image loading
 - OkHttp for network calls
 - An OkHttp helper lib that lets me suspend and await our network calls. I think this looks nicer than chains of callbacks but it's just personal preference 
 - Gson for parsing JSON
+
+![alt text](https://github.com/peterbekos/[BookingDemo]/blob/main/screenshot.png?raw=true)
+
+
+Things I might do / add if I had more time
+- Tests
+- Better (more specific) error handling
+- Accessibility enhancements where applicable
