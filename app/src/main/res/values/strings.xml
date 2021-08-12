@@ -6,4 +6,5 @@
     </plurals>
     <string name="book">Book</string>
     <string name="select_room">Select a room</string>
+    <string name="refresh">Refresh</string>
 </resources>
