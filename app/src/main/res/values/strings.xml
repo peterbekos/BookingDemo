@@ -7,4 +7,7 @@
     <string name="book">Book</string>
     <string name="select_room">Select a room</string>
     <string name="refresh">Refresh</string>
+    <string name="success_message">Successfully Booked Room</string>
+    <string name="error_message">Something went wrong</string>
+    <string name="close">Close</string>
 </resources>

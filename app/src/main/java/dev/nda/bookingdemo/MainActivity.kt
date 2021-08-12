@@ -1,11 +1,13 @@
 package dev.nda.bookingdemo
 
+import android.content.DialogInterface
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import dev.nda.bookingdemo.adapter.RoomAdapter
@@ -25,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         roomService = RoomService()
 
@@ -83,7 +84,11 @@ class MainActivity : AppCompatActivity() {
             val rooms = roomService.fetchRooms()
             runOnUiThread {
                 recycler_loading_frame.visibility = View.GONE
-                rooms?.rooms?.let { populateRooms(it) }
+                if (rooms?.rooms == null) {
+                    showErrorDialog()
+                } else {
+                    populateRooms(rooms.rooms)
+                }
             }
         }
     }
@@ -94,8 +99,27 @@ class MainActivity : AppCompatActivity() {
             val response = roomService.bookRoom(room)
             runOnUiThread {
                 booking_load_frame.visibility = View.GONE
-                //todo
+                if (response != null) {
+                    showBookingResultDialog(response.success ?: false)
+                } else {
+                    showErrorDialog()
+                }
             }
         }
     }
+
+    private fun showBookingResultDialog(success: Boolean) {
+        AlertDialog.Builder(this)
+            .setTitle(if (success) R.string.success_message else R.string.error_message)
+            .setNeutralButton(R.string.close) { dialog, _ -> dialog?.cancel() }
+            .create().show()
+    }
+
+    private fun showErrorDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.error_message)
+            .setNeutralButton(R.string.close) { dialog, _ -> dialog?.cancel() }
+            .create().show()
+    }
 }
+
