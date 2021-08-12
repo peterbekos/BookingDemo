@@ -1,6 +1,8 @@
 package dev.nda.bookingdemo.service
 
 import com.google.gson.Gson
+import dev.nda.bookingdemo.model.BookRoomRespModel
+import dev.nda.bookingdemo.model.RoomModel
 import dev.nda.bookingdemo.model.RoomsModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,7 +30,23 @@ class RoomService {
             // network or parsing error
             null
         }
+    }
 
+    suspend fun bookRoom(room: RoomModel): BookRoomRespModel? {
+        val request = Request.Builder()
+        request.url("https://wetransfer.github.io/bookRoom.json")
 
+        return try {
+            val response = okHttpClient.newCall(request.build()).await()
+            if (response.isSuccessful) {
+                gson.fromJson(response.body?.string() ?: "", BookRoomRespModel::class.java)
+            } else {
+                // bad response
+                null
+            }
+        } catch (e: Exception) {
+            // network or parsing error
+            null
+        }
     }
 }

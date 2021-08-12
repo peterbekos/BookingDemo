@@ -17,20 +17,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var roomService: RoomService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val roomService = RoomService()
+        roomService = RoomService()
 
-        recycler_loading_frame.visibility = View.VISIBLE
-        GlobalScope.launch(Dispatchers.IO) {
-            val rooms = roomService.fetchRooms()
-            runOnUiThread {
-                recycler_loading_frame.visibility = View.GONE
-                rooms?.rooms?.let { populateRooms(it) }
-            }
-        }
+        fetchRooms()
     }
 
     private fun populateRooms(rooms: List<RoomModel>) {
@@ -47,33 +43,44 @@ class MainActivity : AppCompatActivity() {
 
             with(selected_room_bg_image) {
                 Picasso.get().load(it.thumbnail).into(this)
-                if (spots == 0) {
-                    makeGreyScale()
-                } else {
-                    makeNormalScale()
-                }
+                if (spots == 0) makeGreyScale() else makeNormalScale()
             }
 
             with(selected_room_fg_image) {
                 Picasso.get().load(it.thumbnail).into(this)
-                if (spots == 0) {
-                    makeGreyScale()
-                } else {
-                    makeNormalScale()
-                }
+                if (spots == 0) makeGreyScale() else makeNormalScale()
             }
             selected_room_name.text = it.name
 
             with(selected_room_status) {
                 text = resources.getQuantityString(R.plurals.spots_remaining, spots, spots)
-                if (spots == 0) {
-                    setTextColor(Color.RED)
-                } else {
-                    setTextColor(Color.BLACK)
-                }
+                if (spots == 0) setTextColor(Color.RED) else setTextColor(Color.BLACK)
             }
 
             book_button.isEnabled = spots > 0
+            book_button.setOnClickListener { bookRoom(room) }
+        }
+    }
+
+    private fun fetchRooms() {
+        recycler_loading_frame.visibility = View.VISIBLE
+        GlobalScope.launch(Dispatchers.IO) {
+            val rooms = roomService.fetchRooms()
+            runOnUiThread {
+                recycler_loading_frame.visibility = View.GONE
+                rooms?.rooms?.let { populateRooms(it) }
+            }
+        }
+    }
+
+    private fun bookRoom(room: RoomModel) {
+        booking_load_frame.visibility = View.VISIBLE
+        GlobalScope.launch(Dispatchers.IO) {
+            val response = roomService.bookRoom(room)
+            runOnUiThread {
+                booking_load_frame.visibility = View.GONE
+                //todo
+            }
         }
     }
 }
