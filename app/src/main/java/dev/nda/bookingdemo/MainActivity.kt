@@ -3,6 +3,7 @@ package dev.nda.bookingdemo
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import dev.nda.bookingdemo.adapter.RoomAdapter
@@ -22,50 +23,57 @@ class MainActivity : AppCompatActivity() {
 
         val roomService = RoomService()
 
-        room_recycler.layoutManager = LinearLayoutManager(this)
-
+        recycler_loading_frame.visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.IO) {
             val rooms = roomService.fetchRooms()
             runOnUiThread {
+                recycler_loading_frame.visibility = View.GONE
+                rooms?.rooms?.let { populateRooms(it) }
+            }
+        }
+    }
 
-                room_recycler.adapter = RoomAdapter(
-                    rooms!!.rooms!!,
-                    resources
-                ) {
-                    val spots = it.spots ?: 0
+    private fun populateRooms(rooms: List<RoomModel>) {
+        room_recycler.layoutManager = LinearLayoutManager(this)
+        room_recycler.adapter = RoomAdapter(
+            rooms,
+            resources
+        ) { onRoomSelected(it) }
+    }
 
-                    with(selected_room_bg_image) {
-                        Picasso.get().load(it.thumbnail).into(this)
-                        if (spots == 0) {
-                            makeGreyScale()
-                        } else {
-                            makeNormalScale()
-                        }
-                    }
+    private fun onRoomSelected(room: RoomModel) {
+        room.let {
+            val spots = it.spots ?: 0
 
-                    with(selected_room_fg_image) {
-                        Picasso.get().load(it.thumbnail).into(this)
-                        if (spots == 0) {
-                            makeGreyScale()
-                        } else {
-                            makeNormalScale()
-                        }
-                    }
-                    selected_room_name.text = it.name
-
-                    with(selected_room_status) {
-                        text = resources.getQuantityString(R.plurals.spots_remaining, spots, spots)
-                        if (spots == 0) {
-                            setTextColor(Color.RED)
-                        } else {
-                            setTextColor(Color.BLACK)
-                        }
-                    }
-
-                    book_button.isEnabled = spots > 0
-
+            with(selected_room_bg_image) {
+                Picasso.get().load(it.thumbnail).into(this)
+                if (spots == 0) {
+                    makeGreyScale()
+                } else {
+                    makeNormalScale()
                 }
             }
+
+            with(selected_room_fg_image) {
+                Picasso.get().load(it.thumbnail).into(this)
+                if (spots == 0) {
+                    makeGreyScale()
+                } else {
+                    makeNormalScale()
+                }
+            }
+            selected_room_name.text = it.name
+
+            with(selected_room_status) {
+                text = resources.getQuantityString(R.plurals.spots_remaining, spots, spots)
+                if (spots == 0) {
+                    setTextColor(Color.RED)
+                } else {
+                    setTextColor(Color.BLACK)
+                }
+            }
+
+            book_button.isEnabled = spots > 0
         }
     }
 }
