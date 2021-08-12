@@ -5,4 +5,5 @@
         <item quantity="other">%d spots remaining</item>
     </plurals>
     <string name="book">Book</string>
+    <string name="select_room">Select a room</string>
 </resources>
